@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">StashBoX</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="stash">STASH</string>
+    <string name="upcoming">UPCOMING</string>
+    <string name="bills">BILLS</string>
+    <string name="income">INCOME</string>
+    <string name="add_stash">  + ADD STASH</string>
+    <string name="from">From</string>
+    <string name="amount">Amount</string>
+    <string name="submit">Submit</string>
+    <string name="stashname">Stash Name</string>
+    <string name="stashamount">Stash Amount</string>
+    <string name="idr">IDR</string>
+    <string name="colon">:</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="cross">X</string>
+    
+
+</resources>
