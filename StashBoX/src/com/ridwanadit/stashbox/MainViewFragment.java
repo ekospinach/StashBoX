@@ -7,16 +7,16 @@ import java.util.List;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ridwanadit.stashbox.stashjson.StashArray;
 import com.ridwanadit.stashbox.stashjson.StashJSONParser;
@@ -26,8 +26,9 @@ public class MainViewFragment extends Fragment {
 	List<StashObject> stashlist = new ArrayList<StashObject>();
 	StashListViewAdapter adapter;
 	StashArray stashes;
-	ListView liststash;
+	LinearLayout liststash;
 	TextView addstash;
+	View view;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,24 +40,19 @@ public class MainViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.fragment_main_ui, container,false);
+		view = inflater.inflate(R.layout.fragment_main_ui, container,false);
 		addstash = (TextView) view.findViewById(R.id.textview_addstash);
-		liststash = (ListView) view.findViewById(R.id.listview_stash);
-		adapter=new StashListViewAdapter(getActivity(), stashlist);
-		liststash.setAdapter(adapter);
-		liststash.setBackgroundResource(R.drawable.border_ui);
-		liststash.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapterview, View view, int position,
-					long id) {
-				Toast.makeText(getActivity(), adapter.getItem(position).getNama(), Toast.LENGTH_SHORT).show();
-			}
-		});
+		liststash = (LinearLayout) view.findViewById(R.id.listview_stash);
+		adapter = new StashListViewAdapter(getActivity(), stashlist);
+		liststash.setBackgroundResource(R.drawable.border_ui);		
+		addstash.setOnClickListener(addStash);
 		new getStashData().execute();
 		return view;
 	}
-	
+
+	public void test(){
+		
+	}
 	
 	private class getStashData extends AsyncTask<Void, Void, StashArray> {
 
@@ -74,17 +70,28 @@ public class MainViewFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(StashArray result) {
-		
 			super.onPostExecute(result);
 			for (StashObject stash : result.getStash()) {
 				adapter.add(stash);
 				Log.d("stashname", stash.getNama());
 				Log.d("stashamount", stash.getJumlah());
 			}
-			adapter.notifyDataSetChanged();
+			for (int count=0;count<adapter.getCount();count++){
+				liststash.addView(adapter.getView(count, null, liststash));
+			}
+			ProgressBar progress = (ProgressBar) view.findViewById(R.id.progressBar1);
+			progress.setVisibility(View.GONE);
 		}
-		
-		
-		
 	}
+	
+	private final OnClickListener addStash = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			DialogFragment addStashDialog = new AddStashDialogFragment();
+			addStashDialog.setTargetFragment(MainViewFragment.this, 10);
+			addStashDialog.show(getFragmentManager(), "AddStashDialogFragment");
+		}
+	};
 }

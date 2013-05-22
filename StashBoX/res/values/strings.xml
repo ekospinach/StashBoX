@@ -19,6 +19,10 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="cross">X</string>
+    <string name="addstash_header">Tambah Stash Baru</string>
+    <string name="addstash_nama">Nama Stash</string>
+    <string name="addstash_norek">Nomor Rekening (jika ada)</string>
+    <string name="addstash_jumlah">Jumlah Uang pada stash</string>
     
 
 </resources>

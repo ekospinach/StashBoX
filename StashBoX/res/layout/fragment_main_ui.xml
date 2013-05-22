@@ -12,25 +12,32 @@
         android:text="@string/stash"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ListView
+    <LinearLayout
         android:id="@+id/listview_stash"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textview_addstash"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textview_stash"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:orientation="vertical"
         android:padding="5dp" >
-    </ListView>
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textview_addstash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/listview_stash"
         android:layout_alignLeft="@+id/listview_stash"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
         android:text="@string/add_stash"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
