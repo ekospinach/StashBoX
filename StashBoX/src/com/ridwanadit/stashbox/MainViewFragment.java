@@ -1,10 +1,10 @@
 package com.ridwanadit.stashbox;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -23,13 +23,15 @@ import com.ridwanadit.stashbox.stashjson.StashJSONParser;
 import com.ridwanadit.stashbox.stashjson.StashObject;
 
 public class MainViewFragment extends Fragment {
+	private static final String STASH_FILENAME = "stash.json";
+
 	List<StashObject> stashlist = new ArrayList<StashObject>();
 	StashListViewAdapter adapter;
 	StashArray stashes;
 	LinearLayout liststash;
 	TextView addstash;
 	View view;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -51,19 +53,19 @@ public class MainViewFragment extends Fragment {
 	}
 
 	public void test(){
-		
+
 	}
-	
+
 	private class getStashData extends AsyncTask<Void, Void, StashArray> {
 
 		@Override
 		protected StashArray doInBackground(Void... params) {
 			try {
-				InputStream	in = getResources().openRawResource(R.raw.stash);
-				stashes = StashJSONParser.parse(in);
-			} catch (NotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (!(getActivity().openFileInput(STASH_FILENAME).equals(null))){
+					InputStream in = getActivity().openFileInput(STASH_FILENAME);
+					stashes = StashJSONParser.parse(in);
+				}
+			} catch (FileNotFoundException e) {e.printStackTrace();
 			}
 			return stashes;
 		}
@@ -71,26 +73,38 @@ public class MainViewFragment extends Fragment {
 		@Override
 		protected void onPostExecute(StashArray result) {
 			super.onPostExecute(result);
-			for (StashObject stash : result.getStash()) {
-				adapter.add(stash);
-				Log.d("stashname", stash.getNama());
-				Log.d("stashamount", stash.getJumlah());
+			if (result!=null){
+				for (StashObject stash : result.getStash()) {
+					adapter.add(stash);
+					Log.d("stashname", stash.getNama());
+					Log.d("stashamount", stash.getJumlah());
+				}
 			}
-			for (int count=0;count<adapter.getCount();count++){
-				liststash.addView(adapter.getView(count, null, liststash));
+
+			if (adapter.getCount()!=0) {
+				for (int count=0;count<adapter.getCount();count++){
+					liststash.addView(adapter.getView(count, null, liststash));
+				}				
+			} else {
+				Log.d("adapter", String.valueOf(adapter.getCount()));
+				TextView empty = (TextView) view.findViewById(R.id.textview_stashkosong);
+				empty.setVisibility(View.VISIBLE);	
 			}
+
 			ProgressBar progress = (ProgressBar) view.findViewById(R.id.progressBar1);
 			progress.setVisibility(View.GONE);
+
 		}
 	}
-	
+
 	private final OnClickListener addStash = new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			DialogFragment addStashDialog = new AddStashDialogFragment();
 			addStashDialog.setTargetFragment(MainViewFragment.this, 10);
+			addStashDialog.setCancelable(false);
 			addStashDialog.show(getFragmentManager(), "AddStashDialogFragment");
 		}
 	};

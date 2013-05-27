@@ -23,6 +23,7 @@
     <string name="addstash_nama">Nama Stash</string>
     <string name="addstash_norek">Nomor Rekening (jika ada)</string>
     <string name="addstash_jumlah">Jumlah Uang pada stash</string>
+    <string name="addstash_kosong">Anda belum memiliki Stash</string>
     
 
 </resources>
